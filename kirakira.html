@@ -1,0 +1,34 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<title>min</title>
+<script src="egarjs.js"></script>
+<script>"use strict"
+var main = function(app) {
+	var mx = 500
+	var my = 500
+	app.loop = function(g, ts, dt, vw) {
+		g.setColor(255, 255, 0, 1)
+		for (var i = 0; i < 10; i++) {
+			const th = Math.random() * 2 * Math.PI
+			const l1 = 30 + Math.random() * 40
+			g.beginPath()
+			const x1 = mx + Math.cos(th) * l1
+			const y1 = my + Math.sin(th) * l1
+			g.moveTo(x1, y1)
+			const l2 = 300 + Math.random() * 500
+			const dth = 0.01
+			const x2 = mx + Math.cos(th - dth) * l2
+			const y2 = my + Math.sin(th - dth) * l2
+			g.lineTo(x2, y2)
+			const x3 = mx + Math.cos(th + dth) * l2
+			const y3 = my + Math.sin(th + dth) * l2
+			g.lineTo(x3, y3)
+			g.fill()
+		}
+	}
+	app.tap = function(x, y) {
+		mx = x
+		my = y
+	}
+}
+</script>
+</head></html>
