@@ -511,23 +511,30 @@ window.onload = function() {
 	document.head.appendChild(vp);
 	
 	document.body.style.margin = "0";
+	
 	var canvas = create("canvas");
 	canvas.style.width = "100%";
 	canvas.style.height = "100%";
+	canvas.style.zIndex = 3
+	canvas.style.display = "block"
+	canvas.style.position = "absolute"
+	canvas.style.top = "0"
+	canvas.style.left = "0"
+
 	var d = document.body.children[0];
 	if (d)
 		document.body.insertBefore(canvas, d);
 	else
 		document.body.appendChild(canvas);
-	
 	var g = getContext(canvas);
 	
-	var video = create("video")
+//	var video = create("video") // have to add on HTML at iOS Safari
 	video.autoplay = true
 	video.playsinline = true
+	video.style.display = "block"
 	video.style.width = "100%"
+	video.style.transform = "scale(0.01)"
 	document.body.appendChild(video);
-//	video.style.transform = "scale(0.01)"
 
 	const USE_CAMERA_FRONT = false;
 //	var videoop = USE_CAMERA_FRONT ? true : { facingMode : { exact : "environment" } };
