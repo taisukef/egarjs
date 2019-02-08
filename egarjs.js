@@ -526,6 +526,7 @@ window.onload = function() {
 	video.autoplay = true
 	video.playsinline = true
 	video.style.width = "100%"
+	document.body.appendChild(video);
 //	video.style.transform = "scale(0.01)"
 
 	const USE_CAMERA_FRONT = false;
