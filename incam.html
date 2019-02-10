@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<title>kirakira</title>
+<!--<script src="egarjs.js"></script>-->
+<script xsrc="https://taisukef.github.io/egarjs/egarjs.js"></script>
+<script src="egarjs.js"></script>
+<script>"use strict"
+window.USE_CAMERA_FRONT = true
+var main = function(app) {
+	var state = 1
+	var img = null
+	app.loop = function(g, ts, dt, vw) {
+		if (state == 1) {
+		} else if (state == 2) {
+			var h = img.height / img.width * 1000
+			g.drawImage(img, 0, (1000 - h) / 2, 1000, h)
+
+			g.setColor(255, 255, 255)
+			g.fillRect(50, 800, 900, 150)
+			g.setColor(0, 0, 0)
+			g.fillTextCenter("送信する", 500, 800 + 150 / 2, 50)
+		} else if (state == 3) {
+			var h = img.height / img.width * 1000
+			g.drawImage(img, 0, (1000 - h) / 2, 1000, h)
+
+			g.setColor(255, 255, 255)
+			g.fillRect(50, 800, 900, 150)
+			g.setColor(0, 0, 0)
+			g.fillTextCenter("送信しました（ダミー）", 500, 800 + 150 / 2, 50)
+		}
+	}
+	app.tap = function(x, y) {
+		if (state == 1) {
+			img = this.getCameraImage()
+			state = 2
+		} else if (state == 2) {
+			state = 3
+		} else if (state == 3) {
+			state = 1
+			img = null
+		}
+	}
+}
+</script>
+</head>
+<body><video id="video" playsinline></video></body>
+</html>

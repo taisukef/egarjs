@@ -536,7 +536,9 @@ window.onload = function() {
 	video.style.transform = "scale(0.01)"
 	document.body.appendChild(video);
 
-	const USE_CAMERA_FRONT = false;
+	const USE_CAMERA_FRONT = window.USE_CAMERA_FRONT ? window.USE_CAMERA_FRONT : false;
+	const FLIP_HORIZONTAL = USE_CAMERA_FRONT
+
 //	var videoop = USE_CAMERA_FRONT ? true : { facingMode : { exact : "environment" } };
 //	var videoop = USE_CAMERA_FRONT ? true : { facingMode : { ideal : "environment" } };
 	var videoop = USE_CAMERA_FRONT ? true : {
@@ -568,8 +570,13 @@ window.onload = function() {
 		g.font = "normal " + px + "px monospace";
 	};
 	
+	app.getCameraImage = function() {
+		const img = new Image()
+		img.src = canvas.toDataURL('image/jpeg', 0.9)
+		return img
+	}
 	var tlast = 0;
-	var tick = function(ts) {
+	const tick = function(ts) {
 		if (!ts)
 			ts = new Date().getTime();
 		if (!tlast)
@@ -602,6 +609,16 @@ window.onload = function() {
 		//const fitwidth = true; // force fit width
 		//const fitwidth = false; // force fit height
 		
+		var sw = g.sw = Math.min(gw, gh);
+		var offx = g.offx = (gw - sw) / 2;
+		var offy = g.offy = (gh - sw) / 2;
+
+		if (FLIP_HORIZONTAL) {
+			g.save();
+			g.translate(gw, 0)
+			g.scale(-1, 1)
+		}
+
 		var pos = [];
 		if (fitwidth) {
 			const vh2 = vw * caspect;
@@ -632,12 +649,10 @@ window.onload = function() {
 				pos = [ 0, 0, cw2, ch, cw2, 0, cw2, ch ];
 			}
 		}
+		if (FLIP_HORIZONTAL) {
+			g.restore();
+		}
 
-		// viewport
-
-		var sw = g.sw = Math.min(gw, gh);
-		var offx = g.offx = (gw - sw) / 2;
-		var offy = g.offy = (gh - sw) / 2;
 		/*
 		g.setColor(0, 0, 0);
 		g.fillRect(0, 0, gw, gh);
@@ -646,6 +661,7 @@ window.onload = function() {
 		g.fillRect(offx, offy, sw, sw);
 		*/
 		
+		// viewport
 		g.save();
 		var V_WIDTH = 1000;
 		var vwidth = V_WIDTH;
@@ -657,8 +673,9 @@ window.onload = function() {
 		g.rect(0, 0, vwidth, vwidth);
 		g.clip();
 		*/
-		if (app.loop)
+		if (app.loop) {
 			app.loop(g, ts, dt, vwidth);
+		}
 		g.restore();
 	};
 	g.init();
@@ -673,4 +690,5 @@ window.onload = function() {
 	canvas.ontouchdown = top;
 	
 	main(app);
-};
+}
+
