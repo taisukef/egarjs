@@ -511,6 +511,7 @@ window.onload = function() {
 	document.head.appendChild(vp);
 	
 	document.body.style.margin = "0";
+	document.body.style.backgroundColor = "black"
 	
 	var canvas = create("canvas");
 	canvas.style.width = "100%";
