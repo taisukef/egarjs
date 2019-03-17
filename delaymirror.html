@@ -34,6 +34,10 @@ var main = function(app) {
 			idxbuf = (idxbuf + 1) % buflen
 		}
 		var imgsrc = buf[idxbuf]
+		if (imgsrc.width != vw || imgsrc.height != vh) {
+			buf = null
+			return video
+		}
 		return imgsrc
 	}
 	app.loop = function(g, ts, dt, scrw) {
