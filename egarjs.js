@@ -549,15 +549,24 @@ window.onload = function() {
 //		height: { min: 480, ideal: 720, max: 1080 }
 	};
 	const medias = { audio: false, video: videoop };
-	navigator.getUserMedia(medias, function(stream) {
+	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+	if (navigator.getUserMedia) {
+		navigator.getUserMedia(medias, function(stream) {
+				video.srcObject = stream;
+			}, function(err) {
+				alert(err);
+			}
+		)
+	} else {
+		navigator.mediaDevices.getUserMedia(medias).then(function(stream) {
 			video.srcObject = stream;
-		},
-		function(err) {
+		}).catch(function(err) {
 			alert(err);
-		}
-	);
+		})
+	}
 
 	var app = {};
+	app.video = video
 	var tap = function(e) {
 		var dpr = window.devicePixelRatio;
 		var x = (e.clientX - g.offx / dpr) / (g.sw / dpr) * 1000;
@@ -618,6 +627,9 @@ window.onload = function() {
 			g.translate(gw, 0)
 			g.scale(-1, 1)
 		}
+		var imgsrc = video
+		if (app.getBackgroundImage)
+			imgsrc = app.getBackgroundImage(video)
 
 		var pos = [];
 		if (fitwidth) {
@@ -625,12 +637,12 @@ window.onload = function() {
 			if (vh2 > vh) {
 				const cy = (vh2 - vh) / 2 / (vw / cw2);
 				const ch2 = cw2 * vaspect;
-				g.drawImage(video, 0, 0, vw, vh, 0, cy, cw2, ch2);
+				g.drawImage(imgsrc, 0, 0, vw, vh, 0, cy, cw2, ch2);
 				//g.drawImage(video, 0, 0, vw, vh, cw2, cy, cw2, ch2);
 				pos = [ 0, cy, cw2, ch2, cw2, cy, cw2, ch2 ];
 			} else {
 				const vy = (vh - vh2) / 2;
-				g.drawImage(video, 0, vy, vw, vh2, 0, 0, cw2, ch);
+				g.drawImage(imgsrc, 0, vy, vw, vh2, 0, 0, cw2, ch);
 				//g.drawImage(video, 0, vy, vw, vh2, cw2, 0, cw2, ch);
 				pos = [ 0, 0, cw2, ch, cw2, 0, cw2, ch ];
 			}
@@ -639,12 +651,12 @@ window.onload = function() {
 			if (vw2 > vw) {
 				const cx = (vw2 - vw) / 2 / (vh / ch);
 				const cw3 = ch / vaspect;
-				g.drawImage(video, 0, 0, vw, vh, cx, 0, cw3, ch);
+				g.drawImage(imgsrc, 0, 0, vw, vh, cx, 0, cw3, ch);
 				//g.drawImage(video, 0, 0, vw, vh, cw2 + cx, 0, cw3, ch);
 				pos = [ cx, 0, cw3, ch, cw2 + cx, 0, cw3, ch ];
 			} else {
 				const vx = (vw - vw2) / 2;
-				g.drawImage(video, vx, 0, vw2, vh, 0, 0, cw2, ch);
+				g.drawImage(imgsrc, vx, 0, vw2, vh, 0, 0, cw2, ch);
 				//g.drawImage(video, vx, 0, vw2, vh, cw2, 0, cw2, ch);
 				pos = [ 0, 0, cw2, ch, cw2, 0, cw2, ch ];
 			}
