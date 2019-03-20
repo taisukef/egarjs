@@ -4,25 +4,25 @@
 <link rel="apple-touch-icon" href="gmeterar.jpg"/>
 <script src="https://taisukef.github.io/egarjs/egarjs.js"></script>
 <script>"use strict"
-var main = function(app) {
+let main = function(app) {
 	const G = 9.80665
-	var xg = 0
-	var yg = -G
-	var zg = 0
+	let xg = 0
+	let yg = -G
+	let zg = 0
 	app.loop = function(g, ts, dt, vw) {
 		g.setColor(0, 0, 0)
-		var th = Math.atan2(xg, yg)
+		let th = Math.atan2(xg, yg)
 		const gap = 400
-		for (var j = 0; j < 2; j++) {
-			var th2 = th + Math.PI / 2
-			var th4 = th + Math.PI
-			for (var i = 0; i < 3; i++) {
-				var ox = 500 + Math.cos(th2) * gap * (i - 1)
-				var oy = 500 + Math.sin(th2) * gap * (i - 1)
-				var x1 = ox + Math.cos(th) * 1000
-				var y1 = oy + Math.sin(th) * 1000
-				var x2 = ox + Math.cos(th4) * 1000
-				var y2 = oy + Math.sin(th4) * 1000
+		for (let j = 0; j < 2; j++) {
+			let th2 = th + Math.PI / 2
+			let th4 = th + Math.PI
+			for (let i = 0; i < 3; i++) {
+				let ox = 500 + Math.cos(th2) * gap * (i - 1)
+				let oy = 500 + Math.sin(th2) * gap * (i - 1)
+				let x1 = ox + Math.cos(th) * 1000
+				let y1 = oy + Math.sin(th) * 1000
+				let x2 = ox + Math.cos(th4) * 1000
+				let y2 = oy + Math.sin(th4) * 1000
 				g.drawLine(x1, y1, x2, y2)
 			}
 			th = th2
