@@ -1,11 +1,17 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"/>
 <!--<meta name="apple-mobile-web-app-capable" content="yes"/> not supported getUserMedia on PWA -->
 <title>delaymirror</title>
-<script src="https://taisukef.github.io/egarjs/egarjs.js"></script>
+<!--<script src="https://taisukef.github.io/egarjs/egarjs.js"></script>-->
+<script src="egarjs.js"></script>
 <script>"use strict"
 window.USE_CAMERA_FRONT = true
 var main = function(app) {
 	var delaysec = 1.5
+	if (document.location.hash.length > 1) {
+		delaysec = parseFloat(document.location.hash.substring(1))
+		if (delaysec <= 0)
+			delaysec = 0
+	}
 	var buflen = delaysec * 60
 	var idxbuf = 0
 	var buf = null
