@@ -544,8 +544,10 @@ window.onload = function() {
 //	var videoop = USE_CAMERA_FRONT ? true : { facingMode : { ideal : "environment" } };
 	var videoop = USE_CAMERA_FRONT ? true : {
 		facingMode : { ideal : "environment" },
-		width: { min: 640, ideal: 1920 },
-		height: { min: 480, ideal: 1080 }
+		width: { min: 640, ideal: 3840, max: 3840 },
+		height: { min: 480, ideal: 2160, max: 2160 },
+//		width: { min: 640, ideal: 1920 },
+//		height: { min: 480, ideal: 1080 }
 //		width: { min: 640, ideal: 1280, max: 1920 },
 //		height: { min: 480, ideal: 720, max: 1080 }
 	};
