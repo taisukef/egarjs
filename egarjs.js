@@ -537,13 +537,25 @@ window.onload = function() {
 	video.style.transform = "scale(0.01)"
 	document.body.appendChild(video);
 
+	/*
+	navigator.mediaDevices.enumerateDevices()
+	.then(function(devices) {
+		devices.forEach(function(device) {
+			console.log(device);
+		});
+	})
+	.catch(function(err) {
+		console.error(err);
+	});
+	*/
+
 	const USE_CAMERA_FRONT = window.USE_CAMERA_FRONT ? window.USE_CAMERA_FRONT : false;
 	const FLIP_HORIZONTAL = USE_CAMERA_FRONT
 
 //	var videoop = USE_CAMERA_FRONT ? true : { facingMode : { exact : "environment" } };
 //	var videoop = USE_CAMERA_FRONT ? true : { facingMode : { ideal : "environment" } };
-	var videoop = USE_CAMERA_FRONT ? true : {
-		facingMode : { ideal : "environment" },
+	var videoop = {
+		facingMode : { ideal : USE_CAMERA_FRONT ? "user" : "environment" },
 		width: { min: 640, ideal: 3840, max: 3840 },
 		height: { min: 480, ideal: 2160, max: 2160 },
 //		width: { min: 640, ideal: 1920 },
