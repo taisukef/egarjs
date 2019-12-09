@@ -1,0 +1,98 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<!--<meta name="apple-mobile-web-app-capable" content="yes"/> not supported getUserMedia on PWA -->
+<title>delaymirror</title>
+<!--<script src="https://taisukef.github.io/egarjs/egarjs.js"></script>-->
+<script src="egarjs.js"></script>
+<script>"use strict"
+window.USE_CAMERA_FRONT = true
+
+window.DELAY_SEC = 1.5
+
+window.SKIP_FRAMES = 1
+
+var main = function(app) {
+	const maxcnt = SKIP_FRAMES + 1
+	var delaysec = DELAY_SEC / maxcnt
+	if (document.location.hash.length > 1) {
+		delaysec = parseFloat(document.location.hash.substring(1))
+		if (delaysec <= 0)
+			delaysec = 0
+	}
+	var buflen = Math.floor(delaysec * 60) + 1
+	var idxbuf = 0
+	var buf = null
+
+	var createCanvas = function(w, h) {
+		var canvas = document.createElement('canvas')
+		canvas.width = w
+		canvas.height = h
+		canvas.g = canvas.getContext('2d')
+		return canvas
+	}
+	var freez = false
+	let cnt = 0
+	let bkimg = null
+	app.getBackgroundImage = function(video) {
+		if (cnt++ % maxcnt != maxcnt - 1) {
+			return bkimg ? bkimg : video
+		}
+		cnt = 0
+		bkimg = this.getBackgroundImage2(video)
+		return bkimg
+	}
+	app.getBackgroundImage2 = function(video) {
+		const vw = video.videoWidth;
+		const vh = video.videoHeight;
+
+		const mediastream = video.srcObject
+		if (mediastream) {
+			const track = mediastream.getVideoTracks()[0];
+			const capabilities = track.getCapabilities()
+			// Check whether focus distance is supported or not.
+			//console.log(capabilities.focusDistance)
+			if (capabilities.focusDistance) {
+				// Map focus distance to a slider element.
+				let focusvalue = track.getSettings().focusDistance
+				const max = capabilities.focusDistance.max
+				if (focusvalue != max) {
+					const min = capabilities.focusDistance.min
+					const step = capabilities.focusDistance.step
+					console.log(min, max, step, focusvalue)
+					alert("focus lock supported camera! " + max)
+					focusvalue = max
+					track.applyConstraints({
+						advanced : [ { focusMode: "manual", focusDistance: focusvalue } ]
+					})
+				}
+			}
+		}
+
+		if (vw == 0 || vh == 0) {
+			return video
+		}
+		if (buf == null) {
+			buf = []
+			for (var i = 0; i < buflen; i++)
+				buf[i] = createCanvas(vw, vh)
+		}
+		if (!freez) {
+			buf[idxbuf].g.drawImage(video, 0, 0, vw, vh)
+			idxbuf = (idxbuf + 1) % buflen
+		}
+		var imgsrc = buf[idxbuf]
+		if (imgsrc.width != vw || imgsrc.height != vh) {
+			buf = null
+			return video
+		}
+		return imgsrc
+	}
+	app.loop = function(g, ts, dt, scrw) {
+	}
+	app.tap = function() {
+		freez = !freez
+	}
+}
+</script>
+</head>
+<body><video id="video" playsinline></video></body>
+</html>

@@ -713,9 +713,23 @@ window.onload = function() {
 	};
 	window.requestAnimationFrame(step);
 	
+	/*
 	canvas.onclick = tap;
 	canvas.ontouchdown = top;
+	*/
 	
+	setUI(canvas)
+	canvas.onuidown = function(x, y) {
+		if (app.onuidown)
+			app.onuidown(x, y)
+		if (app.tap)
+			app.tap(x, y)
+	}
+	canvas.onuiup = function(x, y) {
+		if (app.onuiup)
+			app.onuiup(x, y)
+	}
+
 	main(app);
 }
 
