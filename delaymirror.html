@@ -41,8 +41,8 @@ var main = function(app) {
 				if (focusvalue != max) {
 					const min = capabilities.focusDistance.min
 					const step = capabilities.focusDistance.step
-					console.log(min, max, step, focusvalue)
-					alert("focus lock supported camera! " + max)
+					// console.log(min, max, step, focusvalue)
+					// alert("focus lock supported camera! " + max)
 					focusvalue = max
 					track.applyConstraints({
 						advanced : [ { focusMode: "manual", focusDistance: focusvalue } ]
